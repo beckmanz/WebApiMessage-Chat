@@ -1,6 +1,6 @@
 ﻿namespace WebApiMessage_Chat.Models;
 
-public class Message
+public class MessageModel
 {
     public int Id { get; set; }
     public int SenderId { get; set; }

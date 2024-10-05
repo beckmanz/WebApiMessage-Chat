@@ -1,6 +1,6 @@
 ﻿namespace WebApiMessage_Chat.Models;
 
-public class User
+public class UserModel
 {
     public int Id { get; set; }
     public string Usename { get; set; }

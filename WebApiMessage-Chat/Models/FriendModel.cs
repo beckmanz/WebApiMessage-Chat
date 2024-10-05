@@ -2,7 +2,7 @@
 
 namespace WebApiMessage_Chat.Models;
 
-public class Friendship
+public class FriendModel
 {
     public int Id { get; set; }
     public int RequestId { get; set; }
