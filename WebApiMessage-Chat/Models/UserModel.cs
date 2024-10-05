@@ -1,4 +1,6 @@
-﻿namespace WebApiMessage_Chat.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace WebApiMessage_Chat.Models;
 
 public class UserModel
 {
@@ -8,7 +10,10 @@ public class UserModel
     public string PasswordHash { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime? UpdateAt { get; set; }
+    [JsonIgnore]
     public ICollection<FriendModel> Friends { get; set; }
+    [JsonIgnore]
     public ICollection<MessageModel> MessagesSent { get; set; }
+    [JsonIgnore]
     public ICollection<MessageModel> MessagesReceived { get; set; }
 }
