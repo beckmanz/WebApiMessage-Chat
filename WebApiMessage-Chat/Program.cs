@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using WebApiMessage_Chat.Data;
-using WebApiMessage_Chat.Models;
 using WebApiMessage_Chat.Services.Friend;
 using WebApiMessage_Chat.Services.Message;
 using WebApiMessage_Chat.Services.User;

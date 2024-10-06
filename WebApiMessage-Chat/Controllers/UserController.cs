@@ -15,7 +15,21 @@ namespace WebApiMessage_Chat.Controllers
         {
             _userInterface = userInterface;
         }
+        
+        [HttpPost]
+        public async Task<ActionResult<ResponseModel<UserModel>>> Registrar(string Username, string Email, string Password)
+        {
+            var user = await _userInterface.Registrar(Username, Email, Password);
+            return Ok(user);
+        }
 
+        [HttpGet("login")]
+        public async Task<ActionResult<ResponseModel<UserModel>>> Login(string Email, string Password)
+        {
+            var user = await _userInterface.Login(Email, Password);
+            return Ok(user);
+        }
+        
         [HttpGet]
         public async Task<ActionResult<ResponseModel<List<UserModel>>>> Listar()
         {
