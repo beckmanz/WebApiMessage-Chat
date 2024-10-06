@@ -11,7 +11,7 @@ public class UserMap : IEntityTypeConfiguration<UserModel>
         builder.HasKey(u => u.Id);
         builder.HasIndex(u => u.Email).IsUnique();
         
-        builder.Property(u => u.Usename)
+        builder.Property(u => u.Username)
             .IsRequired()
             .HasMaxLength(50);
         
