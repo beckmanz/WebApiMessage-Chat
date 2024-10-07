@@ -51,5 +51,12 @@ namespace WebApiMessage_Chat.Controllers
             var user = await _userInterface.Editar(editarDto, userId);
             return Ok(user);
         }
+
+        [HttpDelete("{userId}")]
+        public async Task<ActionResult<ResponseModel<UserModel>>> Excluir(int userId)
+        {
+            var user = await _userInterface.Excluir(userId);
+            return Ok(user);
+        }
     }
 }

@@ -159,4 +159,31 @@ public class UserServices : IUserInterface
             return resposta;
         }
     }
+
+    public async Task<ResponseModel<UserModel>> Excluir(int UserId)
+    {
+        ResponseModel<UserModel> resposta = new ResponseModel<UserModel>();
+        try
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == UserId);
+            if (user == null)
+            {
+                resposta.Mensagem = "Usuário não encontrado, verifique o Id e tente novamente!!";
+                return resposta;
+            }
+
+            _context.Remove(user);
+            await _context.SaveChangesAsync();
+            
+            resposta.Dados = user;
+            resposta.Mensagem = "Usuário excluído com sucesso!!";
+            return resposta;
+        }
+        catch (Exception ex)
+        {
+            resposta.Mensagem = ex.Message;
+            resposta.Status = false;
+            return resposta;
+        }
+    }
 }
