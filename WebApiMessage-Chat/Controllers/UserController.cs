@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebApiMessage_Chat.Dto.User;
 using WebApiMessage_Chat.Models;
 using WebApiMessage_Chat.Services.User;
 
@@ -41,6 +42,13 @@ namespace WebApiMessage_Chat.Controllers
         public async Task<ActionResult<ResponseModel<UserModel>>> Buscar(int UserId)
         {
             var user = await _userInterface.Buscar(UserId);
+            return Ok(user);
+        }
+        
+        [HttpPut("{userId}")]
+        public async Task<ActionResult<ResponseModel<UserModel>>> Editar(EditarDto editarDto, int userId)
+        {
+            var user = await _userInterface.Editar(editarDto, userId);
             return Ok(user);
         }
     }

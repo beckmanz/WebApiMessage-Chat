@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebApiMessage_Chat.Data;
+using WebApiMessage_Chat.Dto.User;
 using WebApiMessage_Chat.Models;
 
 namespace WebApiMessage_Chat.Services.User;
@@ -114,6 +115,41 @@ public class UserServices : IUserInterface
             
             resposta.Dados = user;
             resposta.Mensagem = "Usuário encontrado com sucesso!!";
+            return resposta;
+        }
+        catch (Exception ex)
+        {
+            resposta.Mensagem = ex.Message;
+            resposta.Status = false;
+            return resposta;
+        }
+    }
+
+    public async Task<ResponseModel<UserModel>> Editar(EditarDto editarDto, int UserId)
+    {
+        ResponseModel<UserModel> resposta = new ResponseModel<UserModel>();
+        try
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == UserId);
+            if (user == null)
+            {
+                resposta.Mensagem = "Usuário não encontrado, verifique o Id e tente novamente!!";
+                return resposta;
+            }
+            
+            var HashPassword = BCrypt.Net.BCrypt.HashPassword(editarDto.Password);
+
+            user.Username = editarDto.Username;
+            user.Email = editarDto.Email;
+            user.PasswordHash = HashPassword;
+            user.UpdateAt = DateTime.Now;
+            
+
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+            
+            resposta.Dados = user;
+            resposta.Mensagem = "Usuário atualizado com sucesso!!";
             return resposta;
         }
         catch (Exception ex)
