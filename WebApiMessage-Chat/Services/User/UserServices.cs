@@ -99,4 +99,28 @@ public class UserServices : IUserInterface
             return resposta;
         }
     }
+
+    public async Task<ResponseModel<UserModel>> Buscar(int UserId)
+    {
+        ResponseModel<UserModel> resposta = new ResponseModel<UserModel>();
+        try
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == UserId);
+            if (user == null)
+            {
+                resposta.Mensagem = "Usuário não encontrado, verifique o Id e tente novamente!!";
+                return resposta;
+            }
+            
+            resposta.Dados = user;
+            resposta.Mensagem = "Usuário encontrado com sucesso!!";
+            return resposta;
+        }
+        catch (Exception ex)
+        {
+            resposta.Mensagem = ex.Message;
+            resposta.Status = false;
+            return resposta;
+        }
+    }
 }

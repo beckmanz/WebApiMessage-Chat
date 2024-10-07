@@ -36,5 +36,12 @@ namespace WebApiMessage_Chat.Controllers
             var users = await _userInterface.Listar();
             return Ok(users);
         }
+        
+        [HttpGet("{UserId}")]
+        public async Task<ActionResult<ResponseModel<UserModel>>> Buscar(int UserId)
+        {
+            var user = await _userInterface.Buscar(UserId);
+            return Ok(user);
+        }
     }
 }
