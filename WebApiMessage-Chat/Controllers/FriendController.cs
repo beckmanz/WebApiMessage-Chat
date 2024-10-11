@@ -23,11 +23,6 @@ namespace WebApiMessage_Chat.Controllers
             return Ok(friends);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<ResponseModel<FriendModel>>> Adicionar(int userId, int targetId)
-        {
-            var friend = await _friendInterface.Adicionar(userId, targetId);
-            return Ok(friend);
-        }
+        
     }
 }
