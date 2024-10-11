@@ -10,8 +10,12 @@ public class UserModel
     public string PasswordHash { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime? UpdateAt { get; set; }
-    [JsonIgnore]
+    [JsonIgnore] 
     public ICollection<FriendModel> Friends { get; set; }
+    [JsonIgnore] 
+    public ICollection<BlockedUserModel> Blokeds { get; set; }
+    [JsonIgnore]
+    public ICollection<RequestModel> Requests { get; set; }
     [JsonIgnore]
     public ICollection<MessageModel> MessagesSent { get; set; }
     [JsonIgnore]

@@ -20,5 +20,10 @@ public class MessageMap : IEntityTypeConfiguration<MessageModel>
             .WithMany(u => u.MessagesReceived)
             .HasForeignKey(m => m.ReceiverId)
             .OnDelete(DeleteBehavior.Restrict);
+        
+        builder.HasOne<UserModel>()
+            .WithMany(u => u.MessagesSent)
+            .HasForeignKey(m => m.SenderId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
