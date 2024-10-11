@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WebApiMessage_Chat.Models;
 
@@ -9,17 +10,14 @@ public class FriendMap : IEntityTypeConfiguration<FriendModel>
     public void Configure(EntityTypeBuilder<FriendModel> builder)
     {
         builder.HasKey(f => f.Id);
-        builder.Property(f => f.Status).IsRequired();
-        builder.Property(f => f.DateAccepted).IsRequired(false);
-        
         builder.HasOne<UserModel>()
             .WithMany(u => u.Friends)
-            .HasForeignKey(f=> f.RequesterId)
+            .HasForeignKey(f => f.UserId)
             .OnDelete(DeleteBehavior.Restrict);
         
         builder.HasOne<UserModel>()
             .WithMany()
-            .HasForeignKey(f=> f.AddresseId)
+            .HasForeignKey(f => f.FriendId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }
