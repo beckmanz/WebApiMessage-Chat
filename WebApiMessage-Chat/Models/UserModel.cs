@@ -13,7 +13,7 @@ public class UserModel
     [JsonIgnore] 
     public ICollection<FriendModel> Friends { get; set; }
     [JsonIgnore] 
-    public ICollection<BlockedUserModel> Blokeds { get; set; }
+    public ICollection<BlockedUserModel> Blockeds { get; set; }
     [JsonIgnore]
     public ICollection<RequestModel> Requests { get; set; }
     [JsonIgnore]

@@ -14,7 +14,7 @@ public class AppDbContext : DbContext
     public DbSet<MessageModel> Messages { get; set; }
     public DbSet<RequestModel> Requests { get; set; }
     public DbSet<FriendModel> Friends { get; set; }
-    public DbSet<BlockedUserModel> Blokeds { get; set; }
+    public DbSet<BlockedUserModel> Blockeds { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

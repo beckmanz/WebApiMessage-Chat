@@ -10,7 +10,7 @@ public class BlockedUserMap : IEntityTypeConfiguration<BlockedUserModel>
     {
         builder.HasKey(b => b.Id);
         builder.HasOne<UserModel>()
-            .WithMany(u => u.Blokeds)
+            .WithMany(u => u.Blockeds)
             .HasForeignKey(b => b.UserId)
             .OnDelete(DeleteBehavior.Restrict);
         
