@@ -22,11 +22,24 @@ namespace WebApiMessage_Chat.Controllers
             var friend = await _requestInterface.Adicionar(userId, targetId);
             return Ok(friend);
         }
+
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<ResponseModel<RequestModel>>> Listar(int userId)
+        {
+            var requests = await _requestInterface.Listar(userId);
+            return Ok(requests);
+        }
         
-        [HttpPut]
+        [HttpPost("{userId} {amigoId}")]
         public async Task<ActionResult<ResponseModel<RequestModel>>> Aceitar(int userId, int amigoId)
         {
             var friend = await _requestInterface.Aceitar(userId, amigoId);
+            return Ok(friend);
+        }
+        [HttpDelete]
+        public async Task<ActionResult<ResponseModel<RequestModel>>> Recusar(int userId, int amigoId)
+        {
+            var friend = await _requestInterface.Recusar(userId, amigoId);
             return Ok(friend);
         }
     }
