@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WebApiMessage_Chat.Data;
+using WebApiMessage_Chat.Services.Blocked;
 using WebApiMessage_Chat.Services.Friend;
 using WebApiMessage_Chat.Services.Message;
 using WebApiMessage_Chat.Services.Request;
@@ -18,6 +19,7 @@ builder.Services.AddScoped<IUserInterface, UserServices>();
 builder.Services.AddScoped<IMessageInterface, MessageServices>();
 builder.Services.AddScoped<IFriendInterface, FriendServices>();
 builder.Services.AddScoped<IRequestInterface, RequestService>();
+builder.Services.AddScoped<IBlockedInterface, BlockedServices>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
