@@ -15,13 +15,6 @@ namespace WebApiMessage_Chat.Controllers
         {
             _requestInterface = requestInterface;
         }
-        
-        [HttpPost]
-        public async Task<ActionResult<ResponseModel<RequestModel>>> Adicionar(int userId, int targetId)
-        {
-            var friend = await _requestInterface.Adicionar(userId, targetId);
-            return Ok(friend);
-        }
 
         [HttpGet("{userId}")]
         public async Task<ActionResult<ResponseModel<RequestModel>>> Listar(int userId)
@@ -30,13 +23,13 @@ namespace WebApiMessage_Chat.Controllers
             return Ok(requests);
         }
         
-        [HttpPost("{userId} {amigoId}")]
+        [HttpPost("Aceitar/{userId}/{amigoId}")]
         public async Task<ActionResult<ResponseModel<RequestModel>>> Aceitar(int userId, int amigoId)
         {
             var friend = await _requestInterface.Aceitar(userId, amigoId);
             return Ok(friend);
         }
-        [HttpDelete]
+        [HttpDelete("Recusar/{userId}/{amigoId}")]
         public async Task<ActionResult<ResponseModel<RequestModel>>> Recusar(int userId, int amigoId)
         {
             var friend = await _requestInterface.Recusar(userId, amigoId);
