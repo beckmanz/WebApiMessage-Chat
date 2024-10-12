@@ -71,7 +71,7 @@ public class FriendServices : IFriendInterface
 
             var userFriend = await _context.Friends
                 .FirstOrDefaultAsync(f => (f.UserId == userId && f.FriendId == amigoId) || 
-                                     (f.FriendId == amigoId && f.UserId == userId));
+                                     (f.FriendId == userId && f.UserId == amigoId));
             if (userFriend == null)
             {
                 resposta.Mensagem = "Amigo não encontrado, verifique o Id e tente novamente!";
