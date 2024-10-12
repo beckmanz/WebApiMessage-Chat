@@ -50,4 +50,46 @@ public class FriendServices : IFriendInterface
             return resposta;
         }
     }
+
+    public async Task<ResponseModel<FriendModel>> Remover(int userId, int amigoId)
+    {
+        ResponseModel<FriendModel> resposta = new ResponseModel<FriendModel>();
+        try
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null)
+            {
+                resposta.Mensagem = "Usuário não encontrado, verifique o Id e tente novamente!";
+                return resposta;
+            }
+            var friend = await _context.Users.FirstOrDefaultAsync(u => u.Id == amigoId);
+            if (friend == null)
+            {
+                resposta.Mensagem = "O usuário que deseja remover da lista de amigos não existe, verifique o Id e tente novamente!";
+                return resposta;
+            }
+
+            var userFriend = await _context.Friends
+                .FirstOrDefaultAsync(f => (f.UserId == userId && f.FriendId == amigoId) || 
+                                     (f.FriendId == amigoId && f.UserId == userId));
+            if (userFriend == null)
+            {
+                resposta.Mensagem = "Amigo não encontrado, verifique o Id e tente novamente!";
+                return resposta;
+            }
+
+            _context.Remove(userFriend);
+            await _context.SaveChangesAsync();
+
+            resposta.Dados = userFriend;
+            resposta.Mensagem = "Amizade removida com sucesso!!";
+            return resposta;
+        }
+        catch (Exception ex)
+        {
+            resposta.Mensagem = ex.Message;
+            resposta.Status = false;
+            return resposta;
+        }
+    }
 }

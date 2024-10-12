@@ -23,6 +23,11 @@ namespace WebApiMessage_Chat.Controllers
             return Ok(friends);
         }
 
-        
+        [HttpDelete]
+        public async Task<ActionResult<ResponseModel<FriendModel>>> Remover(int userId, int amigoId)
+        {
+            var friend = await _friendInterface.Remover(userId, amigoId);
+            return Ok(friend);
+        }
     }
 }
