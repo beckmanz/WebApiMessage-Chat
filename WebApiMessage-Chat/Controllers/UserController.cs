@@ -17,7 +17,7 @@ namespace WebApiMessage_Chat.Controllers
             _userInterface = userInterface;
         }
         
-        [HttpPost]
+        [HttpPost("Registrar")]
         public async Task<ActionResult<ResponseModel<UserModel>>> Registrar(string Username, string Email, string Password)
         {
             var user = await _userInterface.Registrar(Username, Email, Password);
