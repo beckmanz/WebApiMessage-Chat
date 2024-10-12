@@ -26,7 +26,7 @@ public class BlockedServices : IBlockedInterface
                 return resposta;
             }
 
-            var blockeds = await _context.Blokeds.Where(b => b.UserId == userId).ToListAsync();
+            var blockeds = await _context.Blockeds.Where(b => b.UserId == userId).ToListAsync();
             if (!blockeds.Any())
             {
                 resposta.Mensagem = "Não foi encontrado nenhum usuário bloqueado!";
@@ -59,24 +59,24 @@ public class BlockedServices : IBlockedInterface
             }
             if (target == null)
             {
-                resposta.Mensagem = "Usuário que deseja adicionar não foi encontrado, verifique o Id e tente novamente!";
+                resposta.Mensagem = "Usuário que deseja bloquear não foi encontrado, verifique o Id e tente novamente!";
                 return resposta;
             }
             
-            var blocked = _context.Blokeds.Where(b => 
+            var blocked = await _context.Blockeds.FirstOrDefaultAsync(b => 
                 b.UserId == userId && b.BlockedUserId == blockedId);
 
-            if (blocked.Any())
+            if (blocked != null)
             {
                 resposta.Mensagem = "Este usuário já é bloqueado por você!!";
                 return resposta;
             }
             
-            var friend = _context.Friends.Where(f => 
+            var friend = await _context.Friends.FirstOrDefaultAsync(f => 
                 (f.UserId == userId && f.FriendId == blockedId) || 
                 (f.UserId == blockedId && f.FriendId == userId));
             
-            if (!friend.Any())
+            if (friend == null)
             {
                 resposta.Mensagem = "Você não pode bloquear um usuário que não é seu amigo!!";
                 return resposta;
@@ -104,8 +104,45 @@ public class BlockedServices : IBlockedInterface
         }
     }
 
-    public Task<ResponseModel<UserModel>> Desbloquear(int userId, int BlockedId)
+    public async Task<ResponseModel<UserModel>> Desbloquear(int userId, int blockedId)
     {
-        throw new NotImplementedException();
+        ResponseModel<UserModel> resposta = new ResponseModel<UserModel>();
+        try
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var target = await _context.Users.FirstOrDefaultAsync(u => u.Id == blockedId);
+            if (user == null)
+            {
+                resposta.Mensagem = "Usuário não encontrado, verifique o Id e tente novamente!";
+                return resposta;
+            }
+            if (target == null)
+            {
+                resposta.Mensagem = "Usuário que deseja desbloquear não foi encontrado, verifique o Id e tente novamente!";
+                return resposta;
+            }
+            
+            var blocked = await _context.Blockeds.FirstOrDefaultAsync(b => 
+                b.UserId == userId && b.BlockedUserId == blockedId);
+
+            if (blocked == null)
+            {
+                resposta.Mensagem = "Este usuário não é bloqueado por você!!";
+                return resposta;
+            }
+
+            _context.Remove(blocked);
+            await _context.SaveChangesAsync();
+
+            resposta.Dados = target;
+            resposta.Mensagem = "Usuário desbloqueado com sucesso!!";
+            return resposta;
+        }
+        catch (Exception ex)
+        {
+            resposta.Mensagem = ex.Message;
+            resposta.Status = false;
+            return resposta;
+        }
     }
 }
