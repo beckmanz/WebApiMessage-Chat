@@ -22,5 +22,12 @@ namespace WebApiMessage_Chat.Controllers
             var messages = await _messageInterface.Listar(userId);
             return Ok(messages);
         }
+
+        [HttpPost("Enviar")]
+        public async Task<ActionResult<ResponseModel<MessageModel>>> Enviar(int userId, int targetId, string content)
+        {
+            var message = await _messageInterface.Enviar(userId, targetId, content);
+            return Ok(message);
+        }
     }
 }
