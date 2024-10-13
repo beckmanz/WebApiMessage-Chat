@@ -19,14 +19,19 @@ public class FriendServices : IFriendInterface
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             var target = await _context.Users.FirstOrDefaultAsync(u => u.Id == targetId);
+            if (userId == targetId)
+            {
+                resposta.Mensagem = "Você não pode se adicionar como amigo!!";
+                return resposta;
+            }
             if (user == null)
             {
-                resposta.Mensagem = "Usuário não encontrado, verifique o Id e tente novamente!";
+                resposta.Mensagem = "Usuário não encontrado, verifique o Id e tente novamente!!";
                 return resposta;
             }
             if (target == null)
             {
-                resposta.Mensagem = "Usuário que deseja adicionar não foi encontrado, verifique o Id e tente novamente!";
+                resposta.Mensagem = "Usuário que deseja adicionar não foi encontrado, verifique o Id e tente novamente!!";
                 return resposta;
             }
             
