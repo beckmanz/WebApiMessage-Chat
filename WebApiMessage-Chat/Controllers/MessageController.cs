@@ -29,5 +29,11 @@ namespace WebApiMessage_Chat.Controllers
             var message = await _messageInterface.Enviar(userId, targetId, content);
             return Ok(message);
         }
+        [HttpDelete("Excluir/{userId}/{messageId}")]
+        public async Task<ActionResult<ResponseModel<MessageModel>>> Excluir(int userId, int messageId)
+        {
+            var message = await _messageInterface.Excluir(userId, messageId);
+            return Ok(message);
+        }
     }
 }

@@ -93,4 +93,37 @@ public class MessageServices : IMessageInterface
             return resposta;
         }
     }
+
+    public async Task<ResponseModel<MessageModel>> Excluir(int userId, int messageId)
+    {
+        ResponseModel<MessageModel> resposta = new ResponseModel<MessageModel>();
+        try
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null)
+            {
+                resposta.Mensagem = "Usuário não encontrado, verifique o Id e tente novamente!!";
+                return resposta;
+            }
+            var targetMessage = await _context.Messages.FirstOrDefaultAsync(m => m.Id == messageId && m.SenderId == userId);
+            if (targetMessage == null)
+            {
+                resposta.Mensagem = $"Não foi encontrado uma mensagem do usuário {user.Username} com o Id {messageId}, verifique o Id e tente novamente!!";
+                return resposta;
+            }
+
+            _context.Remove(targetMessage);
+            await _context.SaveChangesAsync();
+
+            resposta.Mensagem = "Mensagem excluída com sucesso!!";
+            resposta.Dados = targetMessage;
+            return resposta;
+        }
+        catch (Exception ex)
+        {
+            resposta.Mensagem = ex.Message;
+            resposta.Status = false;
+            return resposta;
+        }
+    }
 }
