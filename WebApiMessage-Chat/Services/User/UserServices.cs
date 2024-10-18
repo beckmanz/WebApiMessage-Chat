@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 using WebApiMessage_Chat.Data;
 using WebApiMessage_Chat.Dto.User;
 using WebApiMessage_Chat.Models;
@@ -95,23 +96,40 @@ public class UserServices : IUserInterface
         }
     }
 
-    public async Task<ResponseModel<UserModel>> Editar(EditarDto editarDto, int UserId)
+    public async Task<ResponseModel<UserModel>> Editar(EditarDto editarDto, ClaimsPrincipal userClaims)
     {
         ResponseModel<UserModel> resposta = new ResponseModel<UserModel>();
         try
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == UserId);
+            var userIdClaim = userClaims.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                resposta.Mensagem = "Token inválido, userId inválido.";
+                return resposta;
+            }
+            
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
             {
                 resposta.Mensagem = "Usuário não encontrado, verifique o Id e tente novamente!!";
                 return resposta;
             }
             
-            var HashPassword = BCrypt.Net.BCrypt.HashPassword(editarDto.Password);
+            if (!string.IsNullOrWhiteSpace(editarDto.Username))
+            {
+                user.Username = editarDto.Username;
+            }
 
-            user.Username = editarDto.Username;
-            user.Email = editarDto.Email;
-            user.PasswordHash = HashPassword;
+            if (!string.IsNullOrWhiteSpace(editarDto.Email))
+            {
+                user.Email = editarDto.Email;
+            }
+
+            if (!string.IsNullOrWhiteSpace(editarDto.Password))
+            {
+                user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(editarDto.Password);
+            }
+            
             user.UpdateAt = DateTime.Now;
             
 

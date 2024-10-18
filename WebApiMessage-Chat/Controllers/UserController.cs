@@ -35,7 +35,7 @@ namespace WebApiMessage_Chat.Controllers
             return Ok(user);
         }
         
-        [HttpGet]
+        [HttpGet("Listar")]
         [Authorize]
         public async Task<ActionResult<ResponseModel<List<UserModel>>>> Listar()
         {
@@ -43,7 +43,7 @@ namespace WebApiMessage_Chat.Controllers
             return Ok(users);
         }
         
-        [HttpGet("{UserId}")]
+        [HttpGet("Buscar/{UserId}")]
         [Authorize]
         public async Task<ActionResult<ResponseModel<UserModel>>> Buscar(int UserId)
         {
@@ -51,15 +51,15 @@ namespace WebApiMessage_Chat.Controllers
             return Ok(user);
         }
         
-        [HttpPut("{userId}")]
+        [HttpPut("Editar")]
         [Authorize]
-        public async Task<ActionResult<ResponseModel<UserModel>>> Editar(EditarDto editarDto, int userId)
+        public async Task<ActionResult<ResponseModel<UserModel>>> Editar(EditarDto editarDto)
         {
-            var user = await _userInterface.Editar(editarDto, userId);
+            var user = await _userInterface.Editar(editarDto, User);
             return Ok(user);
         }
 
-        [HttpDelete("{userId}")]
+        [HttpDelete("Excluir")]
         [Authorize]
         public async Task<ActionResult<ResponseModel<UserModel>>> Excluir(int userId)
         {
