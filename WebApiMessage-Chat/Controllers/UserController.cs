@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApiMessage_Chat.Dto.User;
 using WebApiMessage_Chat.Models;
+using WebApiMessage_Chat.Services.Token;
 using WebApiMessage_Chat.Services.User;
 
 namespace WebApiMessage_Chat.Controllers
@@ -11,10 +13,12 @@ namespace WebApiMessage_Chat.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserInterface _userInterface;
+        public readonly ITokenInterface _tokenInterface;
 
-        public UserController(IUserInterface userInterface)
+        public UserController(IUserInterface userInterface, ITokenInterface tokenInterface)
         {
             _userInterface = userInterface;
+            _tokenInterface = tokenInterface;
         }
         
         [HttpPost("Registrar")]
@@ -25,13 +29,14 @@ namespace WebApiMessage_Chat.Controllers
         }
 
         [HttpGet("login")]
-        public async Task<ActionResult<ResponseModel<UserModel>>> Login(string Email, string Password)
+        public async Task<ActionResult<ResponseModel<LoginResponseModel>>> GenerateToken(string Email, string Password)
         {
-            var user = await _userInterface.Login(Email, Password);
+            var user = await _tokenInterface.GenerateToken(Email, Password);
             return Ok(user);
         }
         
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<ResponseModel<List<UserModel>>>> Listar()
         {
             var users = await _userInterface.Listar();
@@ -39,6 +44,7 @@ namespace WebApiMessage_Chat.Controllers
         }
         
         [HttpGet("{UserId}")]
+        [Authorize]
         public async Task<ActionResult<ResponseModel<UserModel>>> Buscar(int UserId)
         {
             var user = await _userInterface.Buscar(UserId);
@@ -46,6 +52,7 @@ namespace WebApiMessage_Chat.Controllers
         }
         
         [HttpPut("{userId}")]
+        [Authorize]
         public async Task<ActionResult<ResponseModel<UserModel>>> Editar(EditarDto editarDto, int userId)
         {
             var user = await _userInterface.Editar(editarDto, userId);
@@ -53,6 +60,7 @@ namespace WebApiMessage_Chat.Controllers
         }
 
         [HttpDelete("{userId}")]
+        [Authorize]
         public async Task<ActionResult<ResponseModel<UserModel>>> Excluir(int userId)
         {
             var user = await _userInterface.Excluir(userId);
