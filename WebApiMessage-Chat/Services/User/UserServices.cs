@@ -52,36 +52,6 @@ public class UserServices : IUserInterface
         }
     }
 
-    public async Task<ResponseModel<UserModel>> Login(string Email, string Password)
-    {
-        ResponseModel<UserModel> resposta = new ResponseModel<UserModel>();
-        try
-        {
-            var user = await _context.Users.FirstOrDefaultAsync( u => u.Email == Email);
-            if (user == null)
-            {
-                resposta.Mensagem = "Usuário não encontrado, verifique o email e tente novamente!!";
-                return resposta;
-            }
-            
-            if (!BCrypt.Net.BCrypt.Verify(Password, user.PasswordHash))
-            {
-                resposta.Mensagem = "Senha incorreta, verifique a senha e tente novamente!!";
-                return resposta;
-            }
-
-            resposta.Dados = user;
-            resposta.Mensagem = "Usuário logado com sucesso!!";
-            return resposta;
-        }
-        catch (Exception ex)
-        {
-            resposta.Mensagem = ex.Message;
-            resposta.Status = false;
-            return resposta;
-        }
-    }
-
     public async Task<ResponseModel<List<UserModel>>> Listar()
     {
         ResponseModel<List<UserModel>> resposta = new ResponseModel<List<UserModel>>();
