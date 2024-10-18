@@ -10,5 +10,5 @@ public interface IUserInterface
     Task<ResponseModel<List<UserModel>>> Listar();
     Task<ResponseModel<UserModel>> Buscar(int UserId);
     Task<ResponseModel<UserModel>> Editar(EditarDto editarDto, ClaimsPrincipal userClaims);
-    Task<ResponseModel<UserModel>> Excluir(int UserId);
+    Task<ResponseModel<UserModel>> Excluir(ClaimsPrincipal userClaims);
 }

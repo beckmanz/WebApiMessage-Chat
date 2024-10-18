@@ -148,15 +148,22 @@ public class UserServices : IUserInterface
         }
     }
 
-    public async Task<ResponseModel<UserModel>> Excluir(int UserId)
+    public async Task<ResponseModel<UserModel>> Excluir(ClaimsPrincipal userClaims)
     {
         ResponseModel<UserModel> resposta = new ResponseModel<UserModel>();
         try
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == UserId);
+            var userIdClaim = userClaims.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                resposta.Mensagem = "Token inválido, userId inválido.";
+                return resposta;
+            }
+            
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
             {
-                resposta.Mensagem = "Usuário não encontrado, verifique o Id e tente novamente!!";
+                resposta.Mensagem = "Usuário não encontrado, refaça o login e tente novamente!!";
                 return resposta;
             }
 

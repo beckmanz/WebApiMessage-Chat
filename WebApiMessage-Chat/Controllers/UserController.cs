@@ -61,9 +61,9 @@ namespace WebApiMessage_Chat.Controllers
 
         [HttpDelete("Excluir")]
         [Authorize]
-        public async Task<ActionResult<ResponseModel<UserModel>>> Excluir(int userId)
+        public async Task<ActionResult<ResponseModel<UserModel>>> Excluir()
         {
-            var user = await _userInterface.Excluir(userId);
+            var user = await _userInterface.Excluir(User);
             return Ok(user);
         }
     }
