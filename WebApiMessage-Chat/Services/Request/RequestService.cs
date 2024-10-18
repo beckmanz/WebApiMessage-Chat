@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 using WebApiMessage_Chat.Data;
 using WebApiMessage_Chat.Models;
 
@@ -13,11 +14,18 @@ public class RequestService : IRequestInterface
         _context = context;
     }
     
-    public async Task<ResponseModel<List<RequestModel>>> Listar(int userId)
+    public async Task<ResponseModel<List<RequestModel>>> Listar(ClaimsPrincipal userClaims)
     {
         ResponseModel<List<RequestModel>> resposta = new ResponseModel<List<RequestModel>>();
         try
         {
+            var userIdClaim = userClaims.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                resposta.Mensagem = "Token inválido, userId inválido.";
+                return resposta;
+            }
+            
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
             {
@@ -47,11 +55,18 @@ public class RequestService : IRequestInterface
         }
     }
 
-    public async Task<ResponseModel<RequestModel>> Aceitar(int userId, int amigoId)
+    public async Task<ResponseModel<RequestModel>> Aceitar(int amigoId, ClaimsPrincipal userClaims)
     {
         ResponseModel<RequestModel> resposta = new ResponseModel<RequestModel>();
         try
         {
+            var userIdClaim = userClaims.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                resposta.Mensagem = "Token inválido, userId inválido.";
+                return resposta;
+            }
+            
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             var target = await _context.Users.FirstOrDefaultAsync(u => u.Id == amigoId);
             if (user == null)
@@ -95,11 +110,18 @@ public class RequestService : IRequestInterface
         }
     }
 
-    public async Task<ResponseModel<RequestModel>> Recusar(int userId, int amigoId)
+    public async Task<ResponseModel<RequestModel>> Recusar(int amigoId, ClaimsPrincipal userClaims)
     {
         ResponseModel<RequestModel> resposta = new ResponseModel<RequestModel>();
         try
         {
+            var userIdClaim = userClaims.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                resposta.Mensagem = "Token inválido, userId inválido.";
+                return resposta;
+            }
+            
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             var target = await _context.Users.FirstOrDefaultAsync(u => u.Id == amigoId);
             if (user == null)

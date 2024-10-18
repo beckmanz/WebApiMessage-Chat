@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApiMessage_Chat.Models;
 using WebApiMessage_Chat.Services.Request;
@@ -18,23 +17,23 @@ namespace WebApiMessage_Chat.Controllers
             _requestInterface = requestInterface;
         }
 
-        [HttpGet("{userId}")]
-        public async Task<ActionResult<ResponseModel<RequestModel>>> Listar(int userId)
+        [HttpGet("Listar")]
+        public async Task<ActionResult<ResponseModel<RequestModel>>> Listar()
         {
-            var requests = await _requestInterface.Listar(userId);
+            var requests = await _requestInterface.Listar(User);
             return Ok(requests);
         }
         
-        [HttpPost("Aceitar/{userId}/{amigoId}")]
-        public async Task<ActionResult<ResponseModel<RequestModel>>> Aceitar(int userId, int amigoId)
+        [HttpPost("Aceitar/{amigoId}")]
+        public async Task<ActionResult<ResponseModel<RequestModel>>> Aceitar(int amigoId)
         {
-            var friend = await _requestInterface.Aceitar(userId, amigoId);
+            var friend = await _requestInterface.Aceitar(amigoId, User);
             return Ok(friend);
         }
-        [HttpDelete("Recusar/{userId}/{amigoId}")]
-        public async Task<ActionResult<ResponseModel<RequestModel>>> Recusar(int userId, int amigoId)
+        [HttpDelete("Recusar/{amigoId}")]
+        public async Task<ActionResult<ResponseModel<RequestModel>>> Recusar(int amigoId)
         {
-            var friend = await _requestInterface.Recusar(userId, amigoId);
+            var friend = await _requestInterface.Recusar(amigoId, User);
             return Ok(friend);
         }
     }
