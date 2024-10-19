@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using NuGet.ProjectModel;
+﻿using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 using WebApiMessage_Chat.Data;
 using WebApiMessage_Chat.Models;
 
@@ -14,11 +14,18 @@ public class BlockedServices : IBlockedInterface
         _context = context;
     }
 
-    public async Task<ResponseModel<List<BlockedUserModel>>> Listar(int userId)
+    public async Task<ResponseModel<List<BlockedUserModel>>> Listar(ClaimsPrincipal userClaims)
     {
         ResponseModel<List<BlockedUserModel>> resposta = new ResponseModel<List<BlockedUserModel>>();
         try
         {
+            var userIdClaim = userClaims.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                resposta.Mensagem = "Token inválido, userId inválido.";
+                return resposta;
+            }
+            
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
             {
@@ -45,11 +52,18 @@ public class BlockedServices : IBlockedInterface
         }
     }
 
-    public async Task<ResponseModel<UserModel>> Bloquear(int userId, int blockedId)
+    public async Task<ResponseModel<UserModel>> Bloquear(int blockedId, ClaimsPrincipal userClaims)
     {
         ResponseModel<UserModel> resposta = new ResponseModel<UserModel>();
         try
         {
+            var userIdClaim = userClaims.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                resposta.Mensagem = "Token inválido, userId inválido.";
+                return resposta;
+            }
+            
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             var target = await _context.Users.FirstOrDefaultAsync(u => u.Id == blockedId);
             if (user == null)
@@ -104,11 +118,18 @@ public class BlockedServices : IBlockedInterface
         }
     }
 
-    public async Task<ResponseModel<UserModel>> Desbloquear(int userId, int blockedId)
+    public async Task<ResponseModel<UserModel>> Desbloquear(int blockedId, ClaimsPrincipal userClaims)
     {
         ResponseModel<UserModel> resposta = new ResponseModel<UserModel>();
         try
         {
+            var userIdClaim = userClaims.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                resposta.Mensagem = "Token inválido, userId inválido.";
+                return resposta;
+            }
+            
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             var target = await _context.Users.FirstOrDefaultAsync(u => u.Id == blockedId);
             if (user == null)

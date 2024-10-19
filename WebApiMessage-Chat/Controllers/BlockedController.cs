@@ -17,22 +17,22 @@ namespace WebApiMessage_Chat.Controllers
         {
             _blockedInterface = blockedInterface;
         }
-        [HttpGet("{userId}")]
-        public async Task<ActionResult<ResponseModel<List<BlockedUserModel>>>> Listar(int userId)
+        [HttpGet("Listar")]
+        public async Task<ActionResult<ResponseModel<List<BlockedUserModel>>>> Listar()
         {
-            var user = await _blockedInterface.Listar(userId);
+            var user = await _blockedInterface.Listar(User);
             return Ok(user);
         }
-        [HttpPost("{userId}/{blockedId}")]
-        public async Task<ActionResult<ResponseModel<UserModel>>> Bloquear(int userId, int blockedId)
+        [HttpPost("Bloquear/{blockedId}")]
+        public async Task<ActionResult<ResponseModel<UserModel>>> Bloquear(int blockedId)
         {
-            var user = await _blockedInterface.Bloquear(userId, blockedId);
+            var user = await _blockedInterface.Bloquear(blockedId, User);
             return Ok(user);
         }
-        [HttpDelete("{userId}/{blockedId}")]
-        public async Task<ActionResult<ResponseModel<UserModel>>> Desbloquear(int userId, int blockedId)
+        [HttpDelete("Desbloquear/{blockedId}")]
+        public async Task<ActionResult<ResponseModel<UserModel>>> Desbloquear(int blockedId)
         {
-            var user = await _blockedInterface.Desbloquear(userId, blockedId);
+            var user = await _blockedInterface.Desbloquear(blockedId, User);
             return Ok(user);
         }
     }
