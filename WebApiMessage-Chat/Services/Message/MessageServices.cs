@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Elfie.Serialization;
+﻿using System.Security.Claims;
+using Microsoft.CodeAnalysis.Elfie.Serialization;
 using Microsoft.EntityFrameworkCore;
 using WebApiMessage_Chat.Data;
 using WebApiMessage_Chat.Models;
@@ -13,11 +14,18 @@ public class MessageServices : IMessageInterface
     {
         _context = context;
     }
-    public async Task<ResponseModel<List<MessageModel>>> Listar(int userId)
+    public async Task<ResponseModel<List<MessageModel>>> Listar(ClaimsPrincipal userClaims)
     {
         ResponseModel<List<MessageModel>> resposta = new ResponseModel<List<MessageModel>>();
         try
         {
+            var userIdClaim = userClaims.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                resposta.Mensagem = "Token inválido, userId inválido.";
+                return resposta;
+            }
+            
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
             {
@@ -45,11 +53,18 @@ public class MessageServices : IMessageInterface
         }
     }
 
-    public async Task<ResponseModel<MessageModel>> Enviar(int userId, int targetId, string content)
+    public async Task<ResponseModel<MessageModel>> Enviar(int targetId, string content, ClaimsPrincipal userClaims)
     {
         ResponseModel<MessageModel> resposta = new ResponseModel<MessageModel>();
         try
         {
+            var userIdClaim = userClaims.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                resposta.Mensagem = "Token inválido, userId inválido.";
+                return resposta;
+            }
+            
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             var target = await _context.Users.FirstOrDefaultAsync(u => u.Id == targetId);
             if (user == null)
@@ -94,11 +109,19 @@ public class MessageServices : IMessageInterface
         }
     }
 
-    public async Task<ResponseModel<MessageModel>> Excluir(int userId, int messageId)
+    public async Task<ResponseModel<MessageModel>> Excluir(int messageId, ClaimsPrincipal userClaims)
     {
         ResponseModel<MessageModel> resposta = new ResponseModel<MessageModel>();
         try
         {
+            
+            var userIdClaim = userClaims.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                resposta.Mensagem = "Token inválido, userId inválido.";
+                return resposta;
+            }
+            
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
             {

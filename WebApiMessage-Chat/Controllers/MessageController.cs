@@ -18,23 +18,23 @@ namespace WebApiMessage_Chat.Controllers
             _messageInterface = messageInterface;
         }
 
-        [HttpGet("{userId}")]
-        public async Task<ActionResult<ResponseModel<List<MessageModel>>>> Listar(int userId)
+        [HttpGet("Listar")]
+        public async Task<ActionResult<ResponseModel<List<MessageModel>>>> Listar()
         {
-            var messages = await _messageInterface.Listar(userId);
+            var messages = await _messageInterface.Listar(User);
             return Ok(messages);
         }
 
         [HttpPost("Enviar")]
-        public async Task<ActionResult<ResponseModel<MessageModel>>> Enviar(int userId, int targetId, string content)
+        public async Task<ActionResult<ResponseModel<MessageModel>>> Enviar(int targetId, string content)
         {
-            var message = await _messageInterface.Enviar(userId, targetId, content);
+            var message = await _messageInterface.Enviar(targetId, content, User);
             return Ok(message);
         }
-        [HttpDelete("Excluir/{userId}/{messageId}")]
-        public async Task<ActionResult<ResponseModel<MessageModel>>> Excluir(int userId, int messageId)
+        [HttpDelete("Excluir/{messageId}")]
+        public async Task<ActionResult<ResponseModel<MessageModel>>> Excluir(int messageId)
         {
-            var message = await _messageInterface.Excluir(userId, messageId);
+            var message = await _messageInterface.Excluir(messageId, User);
             return Ok(message);
         }
     }
