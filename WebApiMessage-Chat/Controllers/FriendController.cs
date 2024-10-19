@@ -18,24 +18,24 @@ namespace WebApiMessage_Chat.Controllers
             _friendInterface = friendInterface;
         }
         
-        [HttpPost("Adicionar/{userId}/{targetId}")]
-        public async Task<ActionResult<ResponseModel<RequestModel>>> Adicionar(int userId, int targetId)
+        [HttpPost("Adicionar/{targetId}")]
+        public async Task<ActionResult<ResponseModel<RequestModel>>> Adicionar(int targetId)
         {
-            var friend = await _friendInterface.Adicionar(userId, targetId);
+            var friend = await _friendInterface.Adicionar(targetId, User);
             return Ok(friend);
         }
 
-        [HttpGet("{userId}")]
-        public async Task<ActionResult<ResponseModel<List<UserModel>>>> Amigos(int userId)
+        [HttpGet("Amigos")]
+        public async Task<ActionResult<ResponseModel<List<UserModel>>>> Amigos()
         {
-            var friends = await _friendInterface.Amigos(userId);
+            var friends = await _friendInterface.Amigos(User);
             return Ok(friends);
         }
 
-        [HttpDelete("Remover/{userId}/{amigoId}")]
-        public async Task<ActionResult<ResponseModel<FriendModel>>> Remover(int userId, int amigoId)
+        [HttpDelete("Remover/{amigoId}")]
+        public async Task<ActionResult<ResponseModel<FriendModel>>> Remover(int amigoId)
         {
-            var friend = await _friendInterface.Remover(userId, amigoId);
+            var friend = await _friendInterface.Remover(amigoId, User);
             return Ok(friend);
         }
     }

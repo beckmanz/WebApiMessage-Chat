@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 using WebApiMessage_Chat.Data;
 using WebApiMessage_Chat.Models;
 
@@ -12,11 +13,18 @@ public class FriendServices : IFriendInterface
         _context = context;
     }
     
-    public async Task<ResponseModel<RequestModel>> Adicionar(int userId, int targetId)
+    public async Task<ResponseModel<RequestModel>> Adicionar(int targetId, ClaimsPrincipal userClaims)
     {
         ResponseModel<RequestModel> resposta = new ResponseModel<RequestModel>();
         try
         {
+            var userIdClaim = userClaims.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                resposta.Mensagem = "Token inválido, userId inválido.";
+                return resposta;
+            }
+            
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             var target = await _context.Users.FirstOrDefaultAsync(u => u.Id == targetId);
             if (userId == targetId)
@@ -67,11 +75,18 @@ public class FriendServices : IFriendInterface
             return resposta;
         }
     }
-    public async Task<ResponseModel<List<UserModel>>> Amigos(int userId)
+    public async Task<ResponseModel<List<UserModel>>> Amigos(ClaimsPrincipal userClaims)
     {
         ResponseModel<List<UserModel>> resposta = new ResponseModel<List<UserModel>>();
         try
         {
+            var userIdClaim = userClaims.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                resposta.Mensagem = "Token inválido, userId inválido.";
+                return resposta;
+            }
+            
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
             {
@@ -83,7 +98,7 @@ public class FriendServices : IFriendInterface
                 .Where(f => f.UserId == userId || f.FriendId == userId)
                 .ToListAsync();
 
-            if (userFriends == null || !userFriends.Any())
+            if (!userFriends.Any())
             {
                 resposta.Mensagem = "Nenhum amigo encontrado!";
                 return resposta;
@@ -107,11 +122,18 @@ public class FriendServices : IFriendInterface
         }
     }
 
-    public async Task<ResponseModel<FriendModel>> Remover(int userId, int amigoId)
+    public async Task<ResponseModel<FriendModel>> Remover(int amigoId, ClaimsPrincipal userClaims)
     {
         ResponseModel<FriendModel> resposta = new ResponseModel<FriendModel>();
         try
         {
+            var userIdClaim = userClaims.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                resposta.Mensagem = "Token inválido, userId inválido.";
+                return resposta;
+            }
+            
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
             {
