@@ -41,9 +41,9 @@ A autenticação é feita por meio de JWT (JSON Web Token). Ao efetuar o login, 
    **Exemplo do Body da Requisição**:
    ```json
    {
-       "username": "usuario1",
-       "email": "usuario1@example.com",
-       "password": "SenhaForte123!"
+       "Username": "usuario1",
+       "Email": "usuario1@example.com",
+       "Password": "SenhaForte123!"
    }
    ````
 2. **Login:** O usuário realiza login no endpoint `/User/Login` e recebe um token JWT.
@@ -51,9 +51,8 @@ A autenticação é feita por meio de JWT (JSON Web Token). Ao efetuar o login, 
    **Exemplo do Body da Requisição**:
       ```json
       {
-         "username": "usuario1",
-         "email": "usuario1@example.com",
-         "password": "SenhaForte123!"
+         "Email": "usuario1@example.com",
+         "Password": "SenhaForte123!"
       }
       ```
 3. **Token JWT:** Esse token deve ser incluído no cabeçalho de todas as requisições subsequentes:
