@@ -1,4 +1,4 @@
-# Documentação da API de Message Chat
+# API de Message Chat
 
 Este documento descreve a API de um sistema de chat simples, permitindo o gerenciamento de usuários, envio de mensagens, controle de amizades, solicitações de amizade, e bloqueios.
 
@@ -36,8 +36,26 @@ A autenticação é feita por meio de JWT (JSON Web Token). Ao efetuar o login, 
 
 ### Fluxo de Autenticação
 
-1. **Registro:** O usuário se registra no endpoint `/api/user/register`.
-2. **Login:** O usuário realiza login no endpoint `/api/user/login` e recebe um token JWT.
+1. **Registro:** O usuário se registra no endpoint `/User/Registrar`.
+
+   **Exemplo do Body da Requisição**:
+   ```json
+   {
+       "username": "usuario1",
+       "email": "usuario1@example.com",
+       "password": "SenhaForte123!"
+   }
+   ````
+2. **Login:** O usuário realiza login no endpoint `/User/Login` e recebe um token JWT.
+
+   **Exemplo do Body da Requisição**:
+      ```json
+      {
+         "username": "usuario1",
+         "email": "usuario1@example.com",
+         "password": "SenhaForte123!"
+      }
+      ```
 3. **Token JWT:** Esse token deve ser incluído no cabeçalho de todas as requisições subsequentes:
    ```
    Authorization: Bearer {token}
@@ -91,19 +109,9 @@ A autenticação é feita por meio de JWT (JSON Web Token). Ao efetuar o login, 
 
 ## Como Usar a API
 
-1. **Registro e Login**: Registre-se via `/api/user/register` e faça login em `/api/user/login` para obter o token JWT.
+1. **Registro e Login**: Registre-se via `/User/Registrar` e faça login em `/User/Login` para obter o token JWT.
 2. **Autenticação**: Use o token nas requisições aos endpoints protegidos.
-3. **Gerenciamento**: Utilize os endpoints para gerenciar usuários, amigos, solicitações e bloqueios.
-
-## Contribuindo
-
-Contribuições são bem-vindas! Siga os passos abaixo para contribuir com o projeto:
-
-1. Faça um fork do repositório.
-2. Crie uma branch para sua funcionalidade (`git checkout -b feature/nova-funcionalidade`).
-3. Faça o commit das suas alterações (`git commit -m 'feat: Adiciona nova funcionalidade'`).
-4. Envie suas alterações (`git push origin feature/nova-funcionalidade`).
-5. Abra um Pull Request.
+3. **Gerenciamento**: Utilize os endpoints para gerenciar usuários, amigos, solicitações, mensagens e bloqueios.
 
 ## Licença
 
