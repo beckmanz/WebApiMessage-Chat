@@ -22,16 +22,16 @@ namespace WebApiMessage_Chat.Controllers
         }
         
         [HttpPost("Registrar")]
-        public async Task<ActionResult<ResponseModel<UserModel>>> Registrar(string Username, string Email, string Password)
+        public async Task<ActionResult<ResponseModel<UserModel>>> Registrar(RegisterDto register)
         {
-            var user = await _userInterface.Registrar(Username, Email, Password);
+            var user = await _userInterface.Registrar(register);
             return Ok(user);
         }
 
-        [HttpGet("login")]
-        public async Task<ActionResult<ResponseModel<LoginResponseModel>>> GenerateToken(string Email, string Password)
+        [HttpPost("login")]
+        public async Task<ActionResult<ResponseModel<LoginResponseModel>>> GenerateToken(LoginDto login)
         {
-            var user = await _tokenInterface.GenerateToken(Email, Password);
+            var user = await _tokenInterface.GenerateToken(login);
             return Ok(user);
         }
         

@@ -1,8 +1,9 @@
-﻿using WebApiMessage_Chat.Models;
+﻿using WebApiMessage_Chat.Dto.User;
+using WebApiMessage_Chat.Models;
 
 namespace WebApiMessage_Chat.Services.Token;
 
 public interface ITokenInterface
 {
-    Task<ResponseModel<LoginResponseModel>> GenerateToken(string Email, string Password);
+    Task<ResponseModel<LoginResponseModel>> GenerateToken(LoginDto login);
 }

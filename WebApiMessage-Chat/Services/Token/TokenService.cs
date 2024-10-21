@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using WebApiMessage_Chat.Data;
+using WebApiMessage_Chat.Dto.User;
 using WebApiMessage_Chat.Models;
 
 namespace WebApiMessage_Chat.Services.Token;
@@ -18,19 +19,19 @@ public class TokenService : ITokenInterface
         _configuration = configuration;
     }
 
-    public async Task<ResponseModel<LoginResponseModel>> GenerateToken(string Email, string Password)
+    public async Task<ResponseModel<LoginResponseModel>> GenerateToken(LoginDto login)
     {
         ResponseModel<LoginResponseModel> response = new ResponseModel<LoginResponseModel>();
         try
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == Email);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == login.Email);
             if (user == null)
             {
                 response.Mensagem = "Usuário não encontrado, verifique o email e tente novamente!!";
                 return response;
             }
             
-            if (!BCrypt.Net.BCrypt.Verify(Password, user.PasswordHash))
+            if (!BCrypt.Net.BCrypt.Verify(login.Password, user.PasswordHash))
             {
                 response.Mensagem = "Senha incorreta, verifique a senha e tente novamente!!";
                 return response;

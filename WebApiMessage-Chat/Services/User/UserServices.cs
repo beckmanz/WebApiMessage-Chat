@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using WebApiMessage_Chat.Data;
 using WebApiMessage_Chat.Dto.User;
 using WebApiMessage_Chat.Models;
@@ -15,12 +16,12 @@ public class UserServices : IUserInterface
         _context = context;
     }
 
-    public async Task<ResponseModel<UserModel>> Registrar(string Username, string Email, string Password)
+    public async Task<ResponseModel<UserModel>> Registrar(RegisterDto register)
     {
         ResponseModel<UserModel> resposta = new ResponseModel<UserModel>();
         try
         {
-            var user = await _context.Users.AnyAsync( u => u.Email == Email);
+            var user = await _context.Users.AnyAsync( u => u.Email == register.Email);
             if (user)
             {
                 resposta.Mensagem = "Já existe um usuário registrado com esse email, use outro email!!";
@@ -28,12 +29,12 @@ public class UserServices : IUserInterface
             }
             
             
-            var HashPassword = BCrypt.Net.BCrypt.HashPassword(Password);
+            var HashPassword = BCrypt.Net.BCrypt.HashPassword(register.Password);
 
             var newUser = new UserModel()
             {
-                Username = Username,
-                Email = Email,
+                Username = register.Username,
+                Email = register.Email,
                 PasswordHash = HashPassword,
 
             };
