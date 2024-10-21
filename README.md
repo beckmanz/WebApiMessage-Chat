@@ -69,9 +69,9 @@ A autenticação é feita por meio de JWT (JSON Web Token). Ao efetuar o login, 
 |--------|----------------|--------------------------------------------|
 | POST   | /User/register | Registra um novo usuário                   |
 | POST   | /User/login    | Realiza o login do usuário                 |
-| GET    | /User          | Lista todos os usuários                    |
+| GET    | /User/Listar   | Lista todos os usuários                    |
 | GET    | /User/{id}     | Obtém os detalhes de um usuário específico |
-| PUT    | /User          | Edita os dados do usuário autenticado      |
+| PUT    | /User/Editar   | Edita os dados do usuário autenticado      |
 | DELETE | /User/Excluir  | Excluir a conta do usuário autenticado     |
 
 ### Friend
